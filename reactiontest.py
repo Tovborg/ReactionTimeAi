@@ -17,10 +17,15 @@ class ReactionTimeEnvironment:
         cookies_accept = self.driver.find_element(By.CSS_SELECTOR, "button.css-47sehv")
         cookies_accept.click()
 
-
+    # Environment interaction methods
     def reset(self):
         self.driver.refresh()
 
+    def click_square(self):
+        square = self.driver.find_element(By.CSS_SELECTOR, "div.css-saet2v")
+        square.click()
+
+    # Environment state methods
     def get_state(self):
         square_color = self.get_square_color()
         # check for view-splash class
@@ -49,16 +54,20 @@ class ReactionTimeEnvironment:
         return square_color_hex
 
     def get_reaction_time(self):
-        try:
-            reaction_time = self.driver.find_element(By.CSS_SELECTOR, "div.css-1qvtbrk.e19owgy78").text
-            react_time_number = int(re.search(r'\d+', reaction_time).group())
-            self.reaction_time = react_time_number
-            print(self.reaction_time)
+        reaction_time = self.driver.find_element(By.CSS_SELECTOR, "div.css-1qvtbrk.e19owgy78").text
+        react_time_number = int(re.search(r'\d+', reaction_time).group())
+        self.reaction_time = react_time_number
+        print(f"Your reaction time is {react_time_number}ms")
 
-        except selenium.common.exceptions.NoSuchElementException:
-            self.reaction_time = None
-            print("No reaction time found")
+    # Gym methods
+    def step(self, action):
+        if action == "click":
+            self.click_square()
 
+        state = self.get_state()
+
+    def calculate_reward_and_done(self):
+        pass
 
 
 
